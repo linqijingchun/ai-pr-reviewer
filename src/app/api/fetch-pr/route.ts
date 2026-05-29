@@ -3,6 +3,7 @@ import { z } from "zod";
 import { parsePrUrl } from "@/lib/github/parse-pr-url";
 import { fetchPrDetails } from "@/lib/github/fetch-pr-details";
 import { fetchPrFiles } from "@/lib/github/fetch-pr-files";
+import { scanAllFiles } from "@/lib/review/risk-scanner";
 import { AppError } from "@/lib/utils/errors";
 
 const RequestSchema = z.object({
@@ -32,7 +33,9 @@ export async function POST(request: NextRequest) {
       fetchPrFiles(prUrl.owner, prUrl.repo, prUrl.pullNumber),
     ]);
 
-    return NextResponse.json({ pr, files });
+    const risks = scanAllFiles(files);
+
+    return NextResponse.json({ pr, files, risks });
   } catch (error) {
     if (error instanceof AppError) {
       return NextResponse.json(
