@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { Search, Loader2 } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
+import type { RuleFinding } from "@/types/review";
 import PrOverview from "@/components/PrOverview";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
 import FileChangeList from "@/components/FileChangeList";
+import RiskList from "@/components/RiskList";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -14,6 +16,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [pr, setPr] = useState<PullRequestInfo | null>(null);
   const [files, setFiles] = useState<PullRequestFile[]>([]);
+  const [risks, setRisks] = useState<RuleFinding[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +25,7 @@ export default function Home() {
     setError(null);
     setPr(null);
     setFiles([]);
+    setRisks([]);
     setLoading(true);
 
     try {
@@ -40,6 +44,7 @@ export default function Home() {
 
       setPr(data.pr);
       setFiles(data.files ?? []);
+      setRisks(data.risks ?? []);
     } catch {
       setError("网络请求失败，请检查网络连接");
     } finally {
@@ -104,6 +109,7 @@ export default function Home() {
           <div className="space-y-6">
             <PrOverview pr={pr} />
             <FileChangeList files={files} />
+            <RiskList findings={risks} />
 
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-2">
@@ -111,15 +117,6 @@ export default function Home() {
               </h2>
               <p className="text-gray-500 text-sm">
                 功能接入后将在此展示变更总结
-              </p>
-            </div>
-
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                Risk Findings
-              </h2>
-              <p className="text-gray-500 text-sm">
-                功能接入后将在此展示风险发现
               </p>
             </div>
 
