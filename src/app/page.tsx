@@ -1,22 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Loader2, AlertCircle } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import type { PullRequestInfo } from "@/types/github";
+import PrOverview from "@/components/PrOverview";
+import LoadingState from "@/components/LoadingState";
+import ErrorState from "@/components/ErrorState";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pr, setPr] = useState<PullRequestInfo | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
+
     setError(null);
+    setPr(null);
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      const res = await fetch("/api/fetch-pr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error?.message ?? "请求失败");
+        return;
+      }
+
+      setPr(data.pr);
+    } catch {
+      setError("网络请求失败，请检查网络连接");
+    } finally {
       setLoading(false);
-      setError("功能尚未接入，敬请期待");
-    }, 1000);
+    }
   };
 
   return (
@@ -58,52 +82,52 @@ export default function Home() {
           </div>
         </form>
 
+        {/* 加载状态 */}
+        {loading && <LoadingState message="正在获取 PR 信息..." />}
+
         {/* 错误提示 */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-            <p className="text-red-700">{error}</p>
-          </div>
+          <ErrorState
+            message={error}
+            onRetry={() =>
+              handleSubmit(new Event("submit") as React.FormEvent)
+            }
+          />
         )}
 
-        {/* 占位结果区 */}
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              PR Overview
-            </h2>
-            <p className="text-gray-500 text-sm">
-              分析后将在此展示 PR 基本信息
-            </p>
-          </div>
+        {/* 结果区 */}
+        {!loading && !error && pr && (
+          <div className="space-y-6">
+            <PrOverview pr={pr} />
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Summary
-            </h2>
-            <p className="text-gray-500 text-sm">
-              分析后将在此展示变更总结
-            </p>
-          </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                Summary
+              </h2>
+              <p className="text-gray-500 text-sm">
+                功能接入后将在此展示变更总结
+              </p>
+            </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Risk Findings
-            </h2>
-            <p className="text-gray-500 text-sm">
-              分析后将在此展示风险发现
-            </p>
-          </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                Risk Findings
+              </h2>
+              <p className="text-gray-500 text-sm">
+                功能接入后将在此展示风险发现
+              </p>
+            </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Review Suggestions
-            </h2>
-            <p className="text-gray-500 text-sm">
-              分析后将在此展示 Review 建议
-            </p>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                Review Suggestions
+              </h2>
+              <p className="text-gray-500 text-sm">
+                功能接入后将在此展示 Review 建议
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
