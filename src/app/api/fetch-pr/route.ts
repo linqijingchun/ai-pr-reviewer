@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { parsePrUrl } from "@/lib/github/parse-pr-url";
 import { fetchPrDetails } from "@/lib/github/fetch-pr-details";
+import { fetchPrFiles } from "@/lib/github/fetch-pr-files";
 import { AppError } from "@/lib/utils/errors";
 
 const RequestSchema = z.object({
@@ -26,13 +27,12 @@ export async function POST(request: NextRequest) {
     }
 
     const prUrl = parsePrUrl(parsed.data.url);
-    const pr = await fetchPrDetails(
-      prUrl.owner,
-      prUrl.repo,
-      prUrl.pullNumber
-    );
+    const [pr, files] = await Promise.all([
+      fetchPrDetails(prUrl.owner, prUrl.repo, prUrl.pullNumber),
+      fetchPrFiles(prUrl.owner, prUrl.repo, prUrl.pullNumber),
+    ]);
 
-    return NextResponse.json({ pr });
+    return NextResponse.json({ pr, files });
   } catch (error) {
     if (error instanceof AppError) {
       return NextResponse.json(

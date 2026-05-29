@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { Search, Loader2 } from "lucide-react";
-import type { PullRequestInfo } from "@/types/github";
+import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import PrOverview from "@/components/PrOverview";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
+import FileChangeList from "@/components/FileChangeList";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pr, setPr] = useState<PullRequestInfo | null>(null);
+  const [files, setFiles] = useState<PullRequestFile[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +21,7 @@ export default function Home() {
 
     setError(null);
     setPr(null);
+    setFiles([]);
     setLoading(true);
 
     try {
@@ -36,6 +39,7 @@ export default function Home() {
       }
 
       setPr(data.pr);
+      setFiles(data.files ?? []);
     } catch {
       setError("网络请求失败，请检查网络连接");
     } finally {
@@ -99,6 +103,7 @@ export default function Home() {
         {!loading && !error && pr && (
           <div className="space-y-6">
             <PrOverview pr={pr} />
+            <FileChangeList files={files} />
 
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-2">
