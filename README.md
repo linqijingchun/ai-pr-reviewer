@@ -86,7 +86,12 @@ src/
 │   ├── SeverityBadge.tsx        # 严重程度 + 置信度标签
 │   ├── CopyButton.tsx           # 复制按钮组件
 │   ├── AnalysisProgress.tsx     # 分析进度指示器
-│   └── ErrorState.tsx           # 错误状态展示
+│   ├── ErrorState.tsx           # 错误状态展示
+│   ├── PRSearchForm.tsx         # PR URL 输入表单
+│   ├── Section.tsx              # 通用卡片区块容器
+│   └── EmptyState.tsx           # 空状态占位组件
+├── hooks/
+│   └── usePRAnalysis.ts         # PR 分析状态管理 hook
 ├── lib/
 │   ├── github/
 │   │   ├── parse-pr-url.ts      # PR URL 解析
@@ -104,7 +109,6 @@ src/
 │   │   └── deepseek-client.ts   # DeepSeek API 客户端
 │   └── utils/
 │       ├── errors.ts            # 错误类型定义
-│       ├── format.ts            # 格式化工具
 │       └── truncate.ts          # Diff 截断工具
 └── types/
     ├── github.ts                # GitHub 相关类型
@@ -264,7 +268,12 @@ AI 分析成功 → 完整报告（规则 + AI 建议）
 | PR 26 | feat/copy-improve | 复制功能改进（复制全部） | 已合并 |
 | PR 27 | feat/responsive-empty | 响应式布局和空状态优化 | 已合并 |
 | PR 28 | feat/readme-docs | 完善 README 文档 | 已合并 |
-| PR 29 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 当前 |
+| PR 29 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 已合并 |
+| PR 30 | refactor/type-consistency | 类型统一与去冗余 | 已合并 |
+| PR 31 | refactor/context-architecture | 上下文架构修正（消除重复 buildContext） | 已合并 |
+| PR 32 | refactor/page-decomposition | 页面逻辑拆分（hook + 组件） | 已合并 |
+| PR 33 | fix/defensive-coding | 防御性编程补全 | 已合并 |
+| PR 34 | refactor/ui-consistency | 组件抽象 + 样式统一 + 文档同步 | 当前 |
 
 ## License
 

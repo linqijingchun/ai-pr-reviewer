@@ -1,6 +1,8 @@
 import type { ReviewRisk } from "@/types/review";
 import SeverityBadge from "./SeverityBadge";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
+import Section from "./Section";
+import EmptyState from "./EmptyState";
 
 type Props = {
   findings: ReviewRisk[];
@@ -9,23 +11,14 @@ type Props = {
 export default function RiskList({ findings }: Props) {
   if (findings.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">
-          Risk Findings
-        </h2>
-        <div className="flex flex-col items-center py-4">
-          <ShieldCheck className="w-8 h-8 text-green-400 mb-2" />
-          <p className="text-gray-500 text-sm">未发现风险</p>
-        </div>
-      </div>
+      <Section title="风险发现">
+        <EmptyState icon={<ShieldCheck className="w-8 h-8 text-green-400" />} message="未发现风险" />
+      </Section>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        Risk Findings ({findings.length})
-      </h2>
+    <Section title="风险发现" count={findings.length}>
       <div className="space-y-3">
         {findings.map((finding, index) => (
           <div
@@ -52,7 +45,7 @@ export default function RiskList({ findings }: Props) {
                     {finding.title}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{finding.reason}</p>
+                <p className="text-sm text-gray-700 mb-2">{finding.reason}</p>
                 <div className="text-xs text-gray-500 space-y-1">
                   <p className="break-all">
                     <span className="font-medium">文件:</span> {finding.file}
@@ -73,6 +66,6 @@ export default function RiskList({ findings }: Props) {
           </div>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

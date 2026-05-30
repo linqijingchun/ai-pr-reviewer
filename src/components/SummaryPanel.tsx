@@ -1,5 +1,6 @@
 import type { ReviewSummary } from "@/types/review";
 import { FileText, Target, Layers } from "lucide-react";
+import Section from "./Section";
 
 type Props = {
   summary: ReviewSummary;
@@ -7,15 +8,13 @@ type Props = {
 
 export default function SummaryPanel({ summary }: Props) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
-
+    <Section title="分析摘要">
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
           <FileText className="w-4 h-4 text-gray-500" />
           <span className="text-sm font-medium text-gray-700">概述</span>
         </div>
-        <p className="text-gray-800 text-sm leading-relaxed pl-6">
+        <p className="text-gray-700 text-sm leading-relaxed pl-6">
           {summary.overview}
         </p>
       </div>
@@ -30,7 +29,7 @@ export default function SummaryPanel({ summary }: Props) {
           </div>
           <ul className="list-disc list-inside pl-6 space-y-1">
             {summary.keyChanges.map((change, i) => (
-              <li key={i} className="text-sm text-gray-800">
+              <li key={i} className="text-sm text-gray-700">
                 {change}
               </li>
             ))}
@@ -58,6 +57,6 @@ export default function SummaryPanel({ summary }: Props) {
           </div>
         </div>
       )}
-    </div>
+    </Section>
   );
 }

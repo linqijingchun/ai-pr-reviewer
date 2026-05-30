@@ -10,6 +10,8 @@ import {
   ChevronRight,
   FileCode,
 } from "lucide-react";
+import Section from "./Section";
+import EmptyState from "./EmptyState";
 
 type Props = {
   files: PullRequestFile[];
@@ -66,28 +68,19 @@ function FileItem({ file }: { file: PullRequestFile }) {
 export default function FileChangeList({ files }: Props) {
   if (files.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">
-          Changed Files
-        </h2>
-        <div className="flex flex-col items-center py-4">
-          <FileCode className="w-8 h-8 text-gray-300 mb-2" />
-          <p className="text-gray-500 text-sm">没有变更文件</p>
-        </div>
-      </div>
+      <Section title="变更文件">
+        <EmptyState icon={<FileCode className="w-8 h-8" />} message="没有变更文件" />
+      </Section>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        Changed Files ({files.length})
-      </h2>
+    <Section title="变更文件" count={files.length}>
       <div className="space-y-2">
         {files.map((file) => (
           <FileItem key={file.filename} file={file} />
         ))}
       </div>
-    </div>
+    </Section>
   );
 }
