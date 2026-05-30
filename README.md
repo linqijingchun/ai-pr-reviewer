@@ -210,34 +210,34 @@ AI 分析成功 → 完整报告（规则 + AI 建议）
 | PR | 分支 | 标题 | 状态 |
 |----|------|------|------|
 | PR 1 | feat/initial-scaffold | 项目初始化脚手架 | 已合并 |
-| PR 2-1 | feat/parse-pr-url | PR URL 解析工具函数 | 已合并 |
-| PR 2-2 | feat/github-client | Octokit 客户端封装 | 已合并 |
-| PR 2-3 | feat/fetch-pr-details | 获取 PR 详情 | 已合并 |
-| PR 2-4 | feat/fetch-pr-files | 获取变更文件列表（含分页） | 已合并 |
-| PR 2-5 | feat/error-utils | 错误处理工具类 | 已合并 |
-| PR 2-6 | feat/truncate-utils | Diff 截断工具函数 | 已合并 |
-| PR 3-1 | feat/risk-rules | 风险规则定义（8 条规则） | 已合并 |
-| PR 3-2 | feat/risk-scanner | 规则扫描引擎 | 已合并 |
-| PR 3-3 | feat/context-builder | AI 上下文构建（风险优先排序） | 已合并 |
-| PR 4-1 | feat/deepseek-client | DeepSeek API 客户端 | 已合并 |
-| PR 4-2 | feat/prompt-builder | Prompt 模板构建 | 已合并 |
-| PR 4-3 | feat/ai-reviewer | AI 分析 + JSON 提取 + Zod 校验 | 已合并 |
-| PR 4-4 | feat/report-builder | 报告合并 + 去重 + 降级 | 已合并 |
-| PR 5-1 | feat/api-route | 核心 API 路由 | 已合并 |
-| PR 5-2 | feat/pr-overview | PR 概览组件 | 已合并 |
-| PR 5-3 | feat/file-change-list | 变更文件列表组件 | 已合并 |
-| PR 5-4 | feat/risk-list | 风险列表组件 | 已合并 |
-| PR 5-5 | feat/summary-panel | AI 摘要面板组件 | 已合并 |
-| PR 5-6 | feat/review-suggestions | Review 建议列表组件 | 已合并 |
-| PR 6-1 | feat/copy-button | 复制按钮组件 | 已合并 |
-| PR 6-2 | feat/analysis-progress | 分析进度指示器 | 已合并 |
-| PR 6-3 | feat/error-state | 错误状态组件 | 已合并 |
-| PR 7-1 | feat/progress-animation | 进度步骤动画 | 已合并 |
-| PR 7-2 | feat/severity-confidence | 风险等级颜色和置信度标签 | 已合并 |
-| PR 7-3 | feat/copy-improve | 复制功能改进（复制全部） | 已合并 |
-| PR 7-4 | feat/responsive-empty | 响应式布局和空状态优化 | 已合并 |
-| PR 8-1 | feat/readme-docs | 完善 README 文档 | 当前 |
-| PR 8-2 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 待完成 |
+| PR 2 | feat/parse-pr-url | PR URL 解析工具函数 | 已合并 |
+| PR 3 | feat/github-client | Octokit 客户端封装 | 已合并 |
+| PR 4 | feat/fetch-pr-details | 获取 PR 详情 | 已合并 |
+| PR 5 | feat/fetch-pr-files | 获取变更文件列表（含分页） | 已合并 |
+| PR 6 | feat/error-utils | 错误处理工具类 | 已合并 |
+| PR 7 | feat/truncate-utils | Diff 截断工具函数 | 已合并 |
+| PR 8 | feat/risk-rules | 风险规则定义（8 条规则） | 已合并 |
+| PR 9 | feat/risk-scanner | 规则扫描引擎 | 已合并 |
+| PR 10 | feat/context-builder | AI 上下文构建（风险优先排序） | 已合并 |
+| PR 11 | feat/deepseek-client | DeepSeek API 客户端 | 已合并 |
+| PR 12 | feat/prompt-builder | Prompt 模板构建 | 已合并 |
+| PR 13 | feat/ai-reviewer | AI 分析 + JSON 提取 + Zod 校验 | 已合并 |
+| PR 14 | feat/report-builder | 报告合并 + 去重 + 降级 | 已合并 |
+| PR 15 | feat/api-route | 核心 API 路由 | 已合并 |
+| PR 16 | feat/pr-overview | PR 概览组件 | 已合并 |
+| PR 17 | feat/file-change-list | 变更文件列表组件 | 已合并 |
+| PR 18 | feat/risk-list | 风险列表组件 | 已合并 |
+| PR 19 | feat/summary-panel | AI 摘要面板组件 | 已合并 |
+| PR 20 | feat/review-suggestions | Review 建议列表组件 | 已合并 |
+| PR 21 | feat/copy-button | 复制按钮组件 | 已合并 |
+| PR 22 | feat/analysis-progress | 分析进度指示器 | 已合并 |
+| PR 23 | feat/error-state | 错误状态组件 | 已合并 |
+| PR 24 | feat/progress-animation | 进度步骤动画 | 已合并 |
+| PR 25 | feat/severity-confidence | 风险等级颜色和置信度标签 | 已合并 |
+| PR 26 | feat/copy-improve | 复制功能改进（复制全部） | 已合并 |
+| PR 27 | feat/responsive-empty | 响应式布局和空状态优化 | 已合并 |
+| PR 28 | feat/readme-docs | 完善 README 文档 | 当前 |
+| PR 29 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 待完成 |
 
 ## License
 
