@@ -12,12 +12,12 @@ export default function PrOverview({ pr }: Props) {
       <div className="space-y-3">
         <div className="flex items-start gap-3">
           <GitPullRequest className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-          <div>
+          <div className="min-w-0 flex-1">
             <a
               href={pr.htmlUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 hover:underline font-medium break-words"
             >
               #{pr.number} {pr.title}
             </a>

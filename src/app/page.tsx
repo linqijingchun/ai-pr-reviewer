@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Search, Loader2, Info } from "lucide-react";
+import { Search, Loader2, Info, GitPullRequest } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import type { ReviewRisk, ReviewSuggestion } from "@/types/review";
 import PrOverview from "@/components/PrOverview";
@@ -87,32 +87,32 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* 标题区 */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="text-center mb-8 sm:mb-10">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             AI PR Reviewer
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             输入 GitHub PR 链接，自动生成变更总结、风险识别与 Review 建议
           </p>
         </div>
 
         {/* 输入区 */}
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://github.com/owner/repo/pull/123"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 text-sm sm:text-base"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={loading || !url.trim()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -123,6 +123,16 @@ export default function Home() {
             </button>
           </div>
         </form>
+
+        {/* 初始状态提示 */}
+        {!loading && !error && !pr && (
+          <div className="bg-white rounded-lg border border-gray-200 p-8 sm:p-12 text-center">
+            <GitPullRequest className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 text-sm sm:text-base">
+              输入 GitHub PR 链接并点击 Analyze 开始分析
+            </p>
+          </div>
+        )}
 
         {/* 加载状态 */}
         {loading && (
@@ -190,14 +200,14 @@ export default function Home() {
             {meta && meta.limitations.length > 0 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Info className="w-4 h-4 text-blue-500" />
+                  <Info className="w-4 h-4 text-blue-500 shrink-0" />
                   <span className="text-sm font-medium text-blue-800">
                     分析说明
                   </span>
                 </div>
                 <ul className="text-sm text-blue-700 space-y-1">
                   {meta.limitations.map((limitation, i) => (
-                    <li key={i}>• {limitation}</li>
+                    <li key={i} className="break-words">• {limitation}</li>
                   ))}
                 </ul>
               </div>
