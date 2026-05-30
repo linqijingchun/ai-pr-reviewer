@@ -1,6 +1,8 @@
 import { getOctokit } from "./github-client";
 import type { PullRequestFile } from "@/types/github";
 
+const MAX_PAGES = 10; // 最多 1000 个文件
+
 export async function fetchPrFiles(
   owner: string,
   repo: string,
@@ -12,7 +14,7 @@ export async function fetchPrFiles(
   let page = 1;
   const perPage = 100;
 
-  while (true) {
+  while (page <= MAX_PAGES) {
     const { data } = await octokit.rest.pulls.listFiles({
       owner,
       repo,

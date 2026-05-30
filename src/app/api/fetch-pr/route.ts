@@ -15,7 +15,16 @@ const RequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: { code: "INVALID_INPUT", message: "请求格式不合法" } },
+        { status: 400 }
+      );
+    }
+
     const parsed = RequestSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -48,8 +57,21 @@ export async function POST(request: NextRequest) {
     try {
       aiResult = await generateReview(pr, context, ruleFindings);
     } catch (err) {
-      aiError = err instanceof Error ? err.message : "AI 分析失败";
-      console.error("AI review error:", aiError);
+      // 脱敏：不暴露内部 URL、状态码等细节
+      if (err instanceof Error) {
+        if (err.message.includes("API Key")) {
+          aiError = "AI 服务配置错误，请联系管理员";
+        } else if (err.message.includes("超时")) {
+          aiError = "AI 分析超时，请稍后重试";
+        } else if (err.message.includes("频率")) {
+          aiError = "AI 服务繁忙，请稍后重试";
+        } else {
+          aiError = "AI 分析失败，已回退到规则扫描结果";
+        }
+      } else {
+        aiError = "AI 分析失败";
+      }
+      console.error("AI review error:", err);
     }
 
     // 合并报告
