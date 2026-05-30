@@ -2,6 +2,8 @@ import type { ReviewSuggestion } from "@/types/review";
 import { MessageSquareText, MessageSquareOff } from "lucide-react";
 import SeverityBadge from "./SeverityBadge";
 import CopyButton from "./CopyButton";
+import Section from "./Section";
+import EmptyState from "./EmptyState";
 
 type Props = {
   suggestions: ReviewSuggestion[];
@@ -19,29 +21,18 @@ function buildAllCommentsText(suggestions: ReviewSuggestion[]): string {
 export default function ReviewSuggestionList({ suggestions }: Props) {
   if (suggestions.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">
-          Review Suggestions
-        </h2>
-        <div className="flex flex-col items-center py-4">
-          <MessageSquareOff className="w-8 h-8 text-gray-300 mb-2" />
-          <p className="text-gray-500 text-sm">暂无 Review 建议</p>
-        </div>
-      </div>
+      <Section title="Review 建议">
+        <EmptyState icon={<MessageSquareOff className="w-8 h-8" />} message="暂无 Review 建议" />
+      </Section>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Review Suggestions ({suggestions.length})
-        </h2>
-        <CopyButton
-          text={buildAllCommentsText(suggestions)}
-          label="复制全部"
-        />
-      </div>
+    <Section
+      title="Review 建议"
+      count={suggestions.length}
+      action={<CopyButton text={buildAllCommentsText(suggestions)} label="复制全部" />}
+    >
       <div className="space-y-4">
         {suggestions.map((suggestion, index) => (
           <div
@@ -69,7 +60,7 @@ export default function ReviewSuggestionList({ suggestions }: Props) {
                     {suggestion.file}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-gray-700 mb-3">
                   {suggestion.description}
                 </p>
                 <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-3">
@@ -86,6 +77,6 @@ export default function ReviewSuggestionList({ suggestions }: Props) {
           </div>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

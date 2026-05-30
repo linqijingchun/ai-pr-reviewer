@@ -1,5 +1,6 @@
 import type { PullRequestInfo } from "@/types/github";
 import { GitPullRequest, User, GitBranch, FileDiff } from "lucide-react";
+import Section from "./Section";
 
 type Props = {
   pr: PullRequestInfo;
@@ -7,8 +8,7 @@ type Props = {
 
 export default function PrOverview({ pr }: Props) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">PR Overview</h2>
+    <Section title="PR 概览">
       <div className="space-y-3">
         <div className="flex items-start gap-3">
           <GitPullRequest className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
@@ -46,6 +46,6 @@ export default function PrOverview({ pr }: Props) {
           </span>
         </div>
       </div>
-    </div>
+    </Section>
   );
 }
