@@ -3,7 +3,12 @@
 import { useState, useRef } from "react";
 import { Search, Loader2, Info, GitPullRequest } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
-import type { ReviewRisk, ReviewSuggestion } from "@/types/review";
+import type {
+  ReviewRisk,
+  ReviewSuggestion,
+  ReviewSummary,
+  ReviewMeta,
+} from "@/types/review";
 import PrOverview from "@/components/PrOverview";
 import ErrorState from "@/components/ErrorState";
 import FileChangeList from "@/components/FileChangeList";
@@ -21,21 +26,11 @@ export default function Home() {
   const [pr, setPr] = useState<PullRequestInfo | null>(null);
   const [files, setFiles] = useState<PullRequestFile[]>([]);
   const [risks, setRisks] = useState<ReviewRisk[]>([]);
-  const [summary, setSummary] = useState<{
-    overview: string;
-    keyChanges: string[];
-    impactAreas: string[];
-  } | null>(null);
+  const [summary, setSummary] = useState<ReviewSummary | null>(null);
   const [suggestions, setSuggestions] = useState<ReviewSuggestion[]>([]);
-  const [meta, setMeta] = useState<{
-    analyzedAt: string;
-    model: string;
-    truncated: boolean;
-    limitations: string[];
-  } | null>(null);
+  const [meta, setMeta] = useState<ReviewMeta | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const doAnalyze = async () => {
     if (!url.trim()) return;
 
     setError(null);
@@ -83,6 +78,11 @@ export default function Home() {
       progressTimer.current.forEach(clearTimeout);
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    doAnalyze();
   };
 
   return (
@@ -177,9 +177,7 @@ export default function Home() {
         {error && (
           <ErrorState
             message={error}
-            onRetry={() =>
-              handleSubmit(new Event("submit") as React.FormEvent)
-            }
+            onRetry={doAnalyze}
           />
         )}
 

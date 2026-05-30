@@ -1,11 +1,8 @@
+import type { ReviewSummary } from "@/types/review";
 import { FileText, Target, Layers } from "lucide-react";
 
 type Props = {
-  summary: {
-    overview: string;
-    keyChanges: string[];
-    impactAreas: string[];
-  };
+  summary: ReviewSummary;
 };
 
 export default function SummaryPanel({ summary }: Props) {

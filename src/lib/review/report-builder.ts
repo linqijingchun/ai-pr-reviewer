@@ -1,5 +1,6 @@
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import type { RuleFinding, ReviewRisk, ReviewSuggestion, ReviewReport } from "@/types/review";
+import { SEVERITY_ORDER } from "@/types/review";
 import type { AiReviewResult } from "./ai-reviewer";
 import { buildContext } from "./context-builder";
 
@@ -47,8 +48,7 @@ function deduplicateRisks(
   }
 
   // 按 severity 排序
-  const order = { high: 0, medium: 1, low: 2 };
-  merged.sort((a, b) => order[a.severity] - order[b.severity]);
+  merged.sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]);
 
   return merged;
 }

@@ -1,5 +1,6 @@
 import type { PullRequestFile } from "@/types/github";
 import type { RuleFinding } from "@/types/review";
+import { SEVERITY_ORDER } from "@/types/review";
 import { riskRules, LARGE_DIFF_THRESHOLD } from "./risk-rules";
 
 function matchPatterns(text: string, patterns: string[]): string[] {
@@ -117,9 +118,8 @@ export function scanAllFiles(files: PullRequestFile[]): RuleFinding[] {
   }
 
   // 按 severity 排序: high > medium > low
-  const severityOrder = { high: 0, medium: 1, low: 2 };
   allFindings.sort(
-    (a, b) => severityOrder[a.severity] - severityOrder[b.severity]
+    (a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]
   );
 
   return allFindings;
