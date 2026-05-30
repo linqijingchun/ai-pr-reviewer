@@ -7,6 +7,15 @@ type Props = {
   suggestions: ReviewSuggestion[];
 };
 
+function buildAllCommentsText(suggestions: ReviewSuggestion[]): string {
+  return suggestions
+    .map(
+      (s, i) =>
+        `### ${i + 1}. ${s.title} (${s.file})\n\n${s.description}\n\n\`\`\`\n${s.reviewComment}\n\`\`\``
+    )
+    .join("\n\n---\n\n");
+}
+
 export default function ReviewSuggestionList({ suggestions }: Props) {
   if (suggestions.length === 0) {
     return (
@@ -21,9 +30,15 @@ export default function ReviewSuggestionList({ suggestions }: Props) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        Review Suggestions ({suggestions.length})
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">
+          Review Suggestions ({suggestions.length})
+        </h2>
+        <CopyButton
+          text={buildAllCommentsText(suggestions)}
+          label="复制全部"
+        />
+      </div>
       <div className="space-y-4">
         {suggestions.map((suggestion, index) => (
           <div
@@ -34,7 +49,16 @@ export default function ReviewSuggestionList({ suggestions }: Props) {
               <MessageSquareText className="w-5 h-5 text-purple-500 mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <SeverityBadge severity={suggestion.confidence === "high" ? "medium" : "low"} />
+                  <SeverityBadge
+                    severity={
+                      suggestion.confidence === "high"
+                        ? "medium"
+                        : suggestion.confidence === "medium"
+                          ? "low"
+                          : "low"
+                    }
+                    confidence={suggestion.confidence}
+                  />
                   <span className="font-medium text-gray-900">
                     {suggestion.title}
                   </span>
