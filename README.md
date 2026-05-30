@@ -2,6 +2,33 @@
 
 AI PR Review 助手：输入 GitHub PR 链接，自动生成变更总结、风险识别与 Review 建议。
 
+## Demo
+
+> 本地运行后访问 http://localhost:3000
+
+**使用示例：**
+
+1. 输入一个 GitHub PR 链接，例如：
+   ```
+   https://github.com/facebook/react/pull/28700
+   ```
+2. 点击 **Analyze** 按钮
+3. 等待分析完成，查看结果：
+   - PR 概览（标题、作者、分支、变更统计）
+   - 变更文件列表（可展开查看 diff）
+   - 风险发现（按严重程度排序，含置信度标签）
+   - AI 摘要（概述、关键变更、影响范围）
+   - Review 建议（可一键复制评论到 GitHub）
+
+**测试用 PR 推荐：**
+
+| 场景 | PR 链接 |
+|------|---------|
+| 包含敏感信息 | 搜索包含 `password`、`api_key` 等关键词的 PR |
+| 修改认证逻辑 | 搜索修改 `auth`、`login`、`session` 相关文件的 PR |
+| 数据库变更 | 搜索包含 `.sql`、`migration` 文件的 PR |
+| 大规模重构 | 搜索变更文件数 > 20 的 PR |
+
 ## 功能特性
 
 - 输入 GitHub Pull Request URL，自动分析 PR 变更
@@ -236,8 +263,8 @@ AI 分析成功 → 完整报告（规则 + AI 建议）
 | PR 25 | feat/severity-confidence | 风险等级颜色和置信度标签 | 已合并 |
 | PR 26 | feat/copy-improve | 复制功能改进（复制全部） | 已合并 |
 | PR 27 | feat/responsive-empty | 响应式布局和空状态优化 | 已合并 |
-| PR 28 | feat/readme-docs | 完善 README 文档 | 当前 |
-| PR 29 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 待完成 |
+| PR 28 | feat/readme-docs | 完善 README 文档 | 已合并 |
+| PR 29 | feat/demo-log | 添加 Demo 链接和 PR 开发日志 | 当前 |
 
 ## License
 
