@@ -1,8 +1,8 @@
-export type RuleSeverity = "high" | "medium" | "low";
+import type { SeverityLevel } from "@/types/review";
 
 export type RuleDefinition = {
   ruleId: string;
-  severity: RuleSeverity;
+  severity: SeverityLevel;
   title: string;
   reason: string;
   matchType: "filename" | "content" | "meta";

@@ -16,7 +16,7 @@ export type PullRequestInfo = {
 
 export type PullRequestFile = {
   filename: string;
-  status: "added" | "removed" | "modified" | "renamed" | string;
+  status: "added" | "removed" | "modified" | "renamed" | "copied" | "changed" | "unchanged";
   additions: number;
   deletions: number;
   changes: number;

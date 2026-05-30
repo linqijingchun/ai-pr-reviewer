@@ -7,7 +7,7 @@ export type ChatCompletionResponse = {
   id: string;
   choices: Array<{
     message: {
-      role: string;
+      role: ChatMessage["role"];
       content: string;
     };
     finish_reason: string;

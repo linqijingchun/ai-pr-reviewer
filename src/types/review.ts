@@ -1,22 +1,30 @@
+import type { PullRequestInfo, PullRequestFile } from "./github";
+
+export type SeverityLevel = "high" | "medium" | "low";
+
+export const SEVERITY_ORDER: Record<SeverityLevel, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
 export type RuleFinding = {
   file: string;
   ruleId: string;
-  severity: "high" | "medium" | "low";
+  severity: SeverityLevel;
   title: string;
   reason: string;
   evidence: string;
 };
 
-export type SeverityLevel = "high" | "medium" | "low";
-
 export type ReviewRisk = {
-  severity: "high" | "medium" | "low";
-  confidence: "high" | "medium" | "low";
+  severity: SeverityLevel;
+  confidence: SeverityLevel;
   file: string;
   title: string;
   reason: string;
   evidence: string;
-  recommendation: string;
+  recommendation?: string;
 };
 
 export type ReviewSuggestion = {
@@ -24,24 +32,28 @@ export type ReviewSuggestion = {
   title: string;
   description: string;
   reviewComment: string;
-  confidence: "high" | "medium" | "low";
+  confidence: SeverityLevel;
+};
+
+export type ReviewSummary = {
+  overview: string;
+  keyChanges: string[];
+  impactAreas: string[];
+};
+
+export type ReviewMeta = {
+  analyzedAt: string;
+  model: string;
+  truncated: boolean;
+  limitations: string[];
 };
 
 export type ReviewReport = {
-  pr: import("./github").PullRequestInfo;
-  files: import("./github").PullRequestFile[];
-  summary: {
-    overview: string;
-    keyChanges: string[];
-    impactAreas: string[];
-  };
+  pr: PullRequestInfo;
+  files: PullRequestFile[];
+  summary: ReviewSummary;
   risks: ReviewRisk[];
   suggestions: ReviewSuggestion[];
   testSuggestions: string[];
-  meta: {
-    analyzedAt: string;
-    model: string;
-    truncated: boolean;
-    limitations: string[];
-  };
+  meta: ReviewMeta;
 };
