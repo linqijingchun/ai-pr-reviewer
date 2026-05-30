@@ -1,7 +1,7 @@
-import type { PullRequestInfo, PullRequestFile } from "@/types/github";
+import type { PullRequestInfo } from "@/types/github";
 import type { RuleFinding } from "@/types/review";
 import type { ChatMessage } from "@/lib/model/deepseek-client";
-import { truncatePatch } from "@/lib/utils/truncate";
+import type { ReviewContext } from "./context-builder";
 
 function buildSystemPrompt(): string {
   return `你是一位资深代码评审工程师，负责对 GitHub Pull Request 进行辅助 Review。
@@ -48,9 +48,8 @@ function buildSystemPrompt(): string {
 
 function buildUserPrompt(
   pr: PullRequestInfo,
-  files: PullRequestFile[],
-  ruleFindings: RuleFinding[],
-  truncated: boolean
+  context: ReviewContext,
+  ruleFindings: RuleFinding[]
 ): string {
   const parts: string[] = [];
 
@@ -76,26 +75,24 @@ function buildUserPrompt(
     }
   }
 
-  // 文件变更详情
+  // 文件变更详情（已由 context-builder 按风险优先级截断）
   parts.push(``);
   parts.push(`## 变更文件详情`);
-  for (const file of files) {
+  for (const file of context.files) {
     parts.push(``);
     parts.push(`### ${file.filename} (${file.status})`);
     parts.push(`+${file.additions} -${file.deletions}`);
-    if (file.patch) {
-      const patch = truncatePatch(file.patch, 80);
-      parts.push(`\`\`\`diff`);
-      parts.push(patch);
-      parts.push(`\`\`\``);
-    } else {
-      parts.push(`(patch 不可用)`);
+    if (file.riskTags.length > 0) {
+      parts.push(`风险标签: ${file.riskTags.join(", ")}`);
     }
+    parts.push(`\`\`\`diff`);
+    parts.push(file.patchExcerpt);
+    parts.push(`\`\`\``);
   }
 
-  if (truncated) {
+  if (context.truncated) {
     parts.push(``);
-    parts.push(`> 注意：部分文件内容因长度限制被截断`);
+    parts.push(`> 注意：部分文件内容因长度限制被截断或跳过`);
   }
 
   parts.push(``);
@@ -106,15 +103,14 @@ function buildUserPrompt(
 
 export function buildReviewMessages(
   pr: PullRequestInfo,
-  files: PullRequestFile[],
-  ruleFindings: RuleFinding[],
-  truncated: boolean = false
+  context: ReviewContext,
+  ruleFindings: RuleFinding[]
 ): ChatMessage[] {
   return [
     { role: "system", content: buildSystemPrompt() },
     {
       role: "user",
-      content: buildUserPrompt(pr, files, ruleFindings, truncated),
+      content: buildUserPrompt(pr, context, ruleFindings),
     },
   ];
 }
