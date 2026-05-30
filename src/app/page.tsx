@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, Info } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import type { RuleFinding, ReviewSuggestion } from "@/types/review";
 import PrOverview from "@/components/PrOverview";
@@ -25,7 +25,12 @@ export default function Home() {
     impactAreas: string[];
   } | null>(null);
   const [suggestions, setSuggestions] = useState<ReviewSuggestion[]>([]);
-  const [aiError, setAiError] = useState<string | null>(null);
+  const [meta, setMeta] = useState<{
+    analyzedAt: string;
+    model: string;
+    truncated: boolean;
+    limitations: string[];
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +42,7 @@ export default function Home() {
     setRisks([]);
     setSummary(null);
     setSuggestions([]);
-    setAiError(null);
+    setMeta(null);
     setLoading(true);
 
     try {
@@ -59,7 +64,7 @@ export default function Home() {
       setRisks(data.risks ?? []);
       setSummary(data.summary ?? null);
       setSuggestions(data.suggestions ?? []);
-      setAiError(data.aiError ?? null);
+      setMeta(data.meta ?? null);
     } catch {
       setError("网络请求失败，请检查网络连接");
     } finally {
@@ -128,14 +133,25 @@ export default function Home() {
 
             {summary && <SummaryPanel summary={summary} />}
 
-            {aiError && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
-                AI 分析不可用: {aiError}（基础扫描已完成）
-              </div>
-            )}
-
             {suggestions.length > 0 && (
               <ReviewSuggestionList suggestions={suggestions} />
+            )}
+
+            {/* 分析限制提示 */}
+            {meta && meta.limitations.length > 0 && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Info className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-medium text-blue-800">
+                    分析说明
+                  </span>
+                </div>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  {meta.limitations.map((limitation, i) => (
+                    <li key={i}>• {limitation}</li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         )}
