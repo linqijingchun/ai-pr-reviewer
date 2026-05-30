@@ -4,6 +4,7 @@ import { parsePrUrl } from "@/lib/github/parse-pr-url";
 import { fetchPrDetails } from "@/lib/github/fetch-pr-details";
 import { fetchPrFiles } from "@/lib/github/fetch-pr-files";
 import { scanAllFiles } from "@/lib/review/risk-scanner";
+import { generateReview } from "@/lib/review/ai-reviewer";
 import { AppError } from "@/lib/utils/errors";
 
 const RequestSchema = z.object({
@@ -35,7 +36,32 @@ export async function POST(request: NextRequest) {
 
     const risks = scanAllFiles(files);
 
-    return NextResponse.json({ pr, files, risks });
+    // AI 分析（失败时降级，仍返回 PR 数据和规则结果）
+    let summary = null;
+    let suggestions: unknown[] = [];
+    let testSuggestions: string[] = [];
+    let aiError: string | null = null;
+
+    try {
+      const aiResult = await generateReview(pr, files, risks);
+      summary = aiResult.summary;
+      suggestions = aiResult.suggestions;
+      testSuggestions = aiResult.testSuggestions;
+    } catch (err) {
+      aiError =
+        err instanceof Error ? err.message : "AI 分析失败";
+      console.error("AI review error:", aiError);
+    }
+
+    return NextResponse.json({
+      pr,
+      files,
+      risks,
+      summary,
+      suggestions,
+      testSuggestions,
+      aiError,
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return NextResponse.json(
