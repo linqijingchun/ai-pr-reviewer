@@ -4,6 +4,7 @@ import { parsePrUrl } from "@/lib/github/parse-pr-url";
 import { fetchPrDetails } from "@/lib/github/fetch-pr-details";
 import { fetchPrFiles } from "@/lib/github/fetch-pr-files";
 import { scanAllFiles } from "@/lib/review/risk-scanner";
+import { buildContext } from "@/lib/review/context-builder";
 import { generateReview } from "@/lib/review/ai-reviewer";
 import { buildReport } from "@/lib/review/report-builder";
 import { AppError } from "@/lib/utils/errors";
@@ -37,19 +38,22 @@ export async function POST(request: NextRequest) {
 
     const ruleFindings = scanAllFiles(files);
 
+    // 构建上下文（按风险优先级截断，供 AI 和报告共用）
+    const context = buildContext(files, ruleFindings);
+
     // AI 分析（失败时降级）
     let aiResult = null;
     let aiError: string | null = null;
 
     try {
-      aiResult = await generateReview(pr, files, ruleFindings);
+      aiResult = await generateReview(pr, context, ruleFindings);
     } catch (err) {
       aiError = err instanceof Error ? err.message : "AI 分析失败";
       console.error("AI review error:", aiError);
     }
 
     // 合并报告
-    const report = buildReport(pr, files, ruleFindings, aiResult, aiError);
+    const report = buildReport(pr, files, ruleFindings, context, aiResult, aiError);
 
     return NextResponse.json(report);
   } catch (error) {

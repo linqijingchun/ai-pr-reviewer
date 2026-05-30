@@ -1,8 +1,8 @@
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import type { RuleFinding, ReviewRisk, ReviewSuggestion, ReviewReport } from "@/types/review";
 import { SEVERITY_ORDER } from "@/types/review";
+import type { ReviewContext } from "./context-builder";
 import type { AiReviewResult } from "./ai-reviewer";
-import { buildContext } from "./context-builder";
 
 function deduplicateRisks(
   ruleFindings: RuleFinding[],
@@ -57,11 +57,10 @@ export function buildReport(
   pr: PullRequestInfo,
   files: PullRequestFile[],
   ruleFindings: RuleFinding[],
+  context: ReviewContext,
   aiResult: AiReviewResult | null,
   aiError: string | null
 ): ReviewReport {
-  const context = buildContext(files, ruleFindings);
-
   let summary: ReviewReport["summary"];
   let risks: ReviewRisk[];
   let suggestions: ReviewSuggestion[];

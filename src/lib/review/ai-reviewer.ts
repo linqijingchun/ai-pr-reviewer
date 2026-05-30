@@ -1,6 +1,7 @@
 import { z } from "zod";
-import type { PullRequestInfo, PullRequestFile } from "@/types/github";
+import type { PullRequestInfo } from "@/types/github";
 import type { RuleFinding } from "@/types/review";
+import type { ReviewContext } from "./context-builder";
 import { chatCompletion } from "@/lib/model/deepseek-client";
 import { buildReviewMessages } from "./prompt-builder";
 
@@ -61,11 +62,10 @@ function extractJson(text: string): string {
 
 export async function generateReview(
   pr: PullRequestInfo,
-  files: PullRequestFile[],
-  ruleFindings: RuleFinding[],
-  truncated: boolean = false
+  context: ReviewContext,
+  ruleFindings: RuleFinding[]
 ): Promise<AiReviewResult> {
-  const messages = buildReviewMessages(pr, files, ruleFindings, truncated);
+  const messages = buildReviewMessages(pr, context, ruleFindings);
 
   const rawContent = await chatCompletion(messages, {
     temperature: 0.2,
