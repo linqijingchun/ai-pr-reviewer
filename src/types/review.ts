@@ -7,6 +7,8 @@ export type RuleFinding = {
   evidence: string;
 };
 
+export type SeverityLevel = "high" | "medium" | "low";
+
 export type ReviewRisk = {
   severity: "high" | "medium" | "low";
   confidence: "high" | "medium" | "low";

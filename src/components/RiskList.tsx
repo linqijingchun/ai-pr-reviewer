@@ -1,9 +1,9 @@
-import type { RuleFinding } from "@/types/review";
+import type { ReviewRisk } from "@/types/review";
 import SeverityBadge from "./SeverityBadge";
 import { ShieldAlert } from "lucide-react";
 
 type Props = {
-  findings: RuleFinding[];
+  findings: ReviewRisk[];
 };
 
 export default function RiskList({ findings }: Props) {
@@ -26,7 +26,7 @@ export default function RiskList({ findings }: Props) {
       <div className="space-y-3">
         {findings.map((finding, index) => (
           <div
-            key={`${finding.ruleId}-${index}`}
+            key={`${finding.file}-${finding.title}-${index}`}
             className="border border-gray-200 rounded-lg p-4"
           >
             <div className="flex items-start gap-3">
@@ -41,7 +41,10 @@ export default function RiskList({ findings }: Props) {
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <SeverityBadge severity={finding.severity} />
+                  <SeverityBadge
+                    severity={finding.severity}
+                    confidence={finding.confidence}
+                  />
                   <span className="font-medium text-gray-900">
                     {finding.title}
                   </span>
@@ -55,6 +58,12 @@ export default function RiskList({ findings }: Props) {
                     <span className="font-medium">证据:</span>{" "}
                     {finding.evidence}
                   </p>
+                  {finding.recommendation && (
+                    <p>
+                      <span className="font-medium">建议:</span>{" "}
+                      {finding.recommendation}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

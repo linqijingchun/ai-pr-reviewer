@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { Search, Loader2, Info } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
-import type { RuleFinding, ReviewSuggestion } from "@/types/review";
+import type { ReviewRisk, ReviewSuggestion } from "@/types/review";
 import PrOverview from "@/components/PrOverview";
 import ErrorState from "@/components/ErrorState";
 import FileChangeList from "@/components/FileChangeList";
@@ -20,7 +20,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [pr, setPr] = useState<PullRequestInfo | null>(null);
   const [files, setFiles] = useState<PullRequestFile[]>([]);
-  const [risks, setRisks] = useState<RuleFinding[]>([]);
+  const [risks, setRisks] = useState<ReviewRisk[]>([]);
   const [summary, setSummary] = useState<{
     overview: string;
     keyChanges: string[];
