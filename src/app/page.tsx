@@ -1,20 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Search, Loader2, Info } from "lucide-react";
 import type { PullRequestInfo, PullRequestFile } from "@/types/github";
 import type { RuleFinding, ReviewSuggestion } from "@/types/review";
 import PrOverview from "@/components/PrOverview";
-import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
 import FileChangeList from "@/components/FileChangeList";
 import RiskList from "@/components/RiskList";
 import SummaryPanel from "@/components/SummaryPanel";
 import ReviewSuggestionList from "@/components/ReviewSuggestionList";
+import AnalysisProgress from "@/components/AnalysisProgress";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progressStep, setProgressStep] = useState(0);
+  const progressTimer = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pr, setPr] = useState<PullRequestInfo | null>(null);
   const [files, setFiles] = useState<PullRequestFile[]>([]);
@@ -44,6 +46,16 @@ export default function Home() {
     setSuggestions([]);
     setMeta(null);
     setLoading(true);
+    setProgressStep(0);
+
+    // 模拟进度步骤
+    progressTimer.current.forEach(clearTimeout);
+    progressTimer.current = [];
+    progressTimer.current.push(
+      setTimeout(() => setProgressStep(1), 800),
+      setTimeout(() => setProgressStep(2), 2000),
+      setTimeout(() => setProgressStep(3), 4000)
+    );
 
     try {
       const res = await fetch("/api/fetch-pr", {
@@ -68,6 +80,7 @@ export default function Home() {
     } catch {
       setError("网络请求失败，请检查网络连接");
     } finally {
+      progressTimer.current.forEach(clearTimeout);
       setLoading(false);
     }
   };
@@ -112,7 +125,43 @@ export default function Home() {
         </form>
 
         {/* 加载状态 */}
-        {loading && <LoadingState message="正在获取 PR 信息..." />}
+        {loading && (
+          <AnalysisProgress
+            steps={[
+              {
+                label: "获取 PR 基本信息",
+                status:
+                  progressStep === 0
+                    ? "active"
+                    : progressStep > 0
+                      ? "done"
+                      : "pending",
+              },
+              {
+                label: "拉取变更文件列表",
+                status:
+                  progressStep === 1
+                    ? "active"
+                    : progressStep > 1
+                      ? "done"
+                      : "pending",
+              },
+              {
+                label: "本地风险扫描",
+                status:
+                  progressStep === 2
+                    ? "active"
+                    : progressStep > 2
+                      ? "done"
+                      : "pending",
+              },
+              {
+                label: "AI 生成分析报告",
+                status: progressStep === 3 ? "active" : "pending",
+              },
+            ]}
+          />
+        )}
 
         {/* 错误提示 */}
         {error && (
