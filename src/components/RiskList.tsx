@@ -1,6 +1,6 @@
 import type { ReviewRisk } from "@/types/review";
 import SeverityBadge from "./SeverityBadge";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 
 type Props = {
   findings: ReviewRisk[];
@@ -10,10 +10,13 @@ export default function RiskList({ findings }: Props) {
   if (findings.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">
           Risk Findings
         </h2>
-        <p className="text-gray-500 text-sm">未发现风险</p>
+        <div className="flex flex-col items-center py-4">
+          <ShieldCheck className="w-8 h-8 text-green-400 mb-2" />
+          <p className="text-gray-500 text-sm">未发现风险</p>
+        </div>
       </div>
     );
   }
@@ -40,26 +43,26 @@ export default function RiskList({ findings }: Props) {
                 }`}
               />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <SeverityBadge
                     severity={finding.severity}
                     confidence={finding.confidence}
                   />
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 break-words">
                     {finding.title}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mb-2">{finding.reason}</p>
                 <div className="text-xs text-gray-500 space-y-1">
-                  <p>
+                  <p className="break-all">
                     <span className="font-medium">文件:</span> {finding.file}
                   </p>
-                  <p>
+                  <p className="break-words">
                     <span className="font-medium">证据:</span>{" "}
                     {finding.evidence}
                   </p>
                   {finding.recommendation && (
-                    <p>
+                    <p className="break-words">
                       <span className="font-medium">建议:</span>{" "}
                       {finding.recommendation}
                     </p>
