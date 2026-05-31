@@ -86,6 +86,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // GitHub API 404
+    if (
+      error instanceof Error &&
+      "status" in error &&
+      (error as { status: number }).status === 404
+    ) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "PR_NOT_FOUND",
+            message: "PR 不存在或无权限访问",
+          },
+        },
+        { status: 404 }
+      );
+    }
+
     console.error("fetch-pr error:", error);
     return NextResponse.json(
       {
