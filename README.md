@@ -177,34 +177,40 @@ AI 模型的上下文窗口有限，因此采用**风险优先级排序 + 分级
 
 ## 快速开始
 
-```powershell
-# 克隆仓库
+```bash
+# 1. 克隆仓库
 git clone https://github.com/linqijingchun/ai-pr-reviewer.git
 cd ai-pr-reviewer
 
-# 安装依赖
+# 2. 安装依赖
 npm install
 
-# 配置环境变量
-Copy-Item .env.example .env.local
-# 编辑 .env.local，填入你的 API Key
+# 3. 配置环境变量（从模板复制）
+cp .env.example .env.local        # macOS / Linux
+# Copy-Item .env.example .env.local  # Windows PowerShell
 
-# 启动开发服务器
+# 4. 编辑 .env.local，填入 DeepSeek API Key（必需）
+#    DEEPSEEK_API_KEY=你的密钥
+#    获取地址：https://platform.deepseek.com （注册即送免费额度）
+
+# 5. 启动
 npm run dev
 ```
 
 访问 http://localhost:3000 即可使用。
 
+> **没有 API Key 也能运行**：不配置 `DEEPSEEK_API_KEY` 时，AI 分析会自动降级为纯规则扫描模式，仍然可以正常使用风险检测功能，只是 AI 摘要和 Review 建议不可用。
+
 ## 环境变量
 
 | 变量名 | 说明 | 是否必须 |
 |--------|------|----------|
-| GITHUB_TOKEN | GitHub Personal Access Token，提高 API 请求频率限制（未认证限 60 次/小时） | 可选 |
-| DEEPSEEK_API_KEY | DeepSeek API 密钥 | 是 |
-| DEEPSEEK_BASE_URL | DeepSeek API 地址，默认 `https://api.deepseek.com` | 是 |
-| DEEPSEEK_MODEL | 使用的模型名称，默认 `deepseek-v4-flash` | 是 |
+| `DEEPSEEK_API_KEY` | DeepSeek API 密钥（[获取地址](https://platform.deepseek.com)） | 是（不配置则降级为规则扫描） |
+| `DEEPSEEK_BASE_URL` | DeepSeek API 地址 | 否，默认 `https://api.deepseek.com` |
+| `DEEPSEEK_MODEL` | 使用的模型名称 | 否，默认 `deepseek-v4-flash` |
+| `GITHUB_TOKEN` | GitHub Personal Access Token，提高 API 频率限制 | 否（未配置限 60 次/小时） |
 
-> **安全提示**：`.env.local` 已被 `.gitignore` 忽略，不会被提交到仓库。其他开发者需要自行创建此文件。
+> **安全提示**：`.env.local` 已被 `.gitignore` 忽略，不会被提交到仓库。
 
 ## 技术栈
 
