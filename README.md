@@ -279,7 +279,8 @@ AI 分析成功 → 完整报告（规则 + AI 建议）
 | PR 31 | refactor/context-architecture | 上下文架构修正（消除重复 buildContext） | 已合并 |
 | PR 32 | refactor/page-decomposition | 页面逻辑拆分（hook + 组件） | 已合并 |
 | PR 33 | fix/defensive-coding | 防御性编程补全 | 已合并 |
-| PR 34 | refactor/ui-consistency | 组件抽象 + 样式统一 + 文档同步 | 当前 |
+| PR 34 | refactor/ui-consistency | 组件抽象 + 样式统一 + 文档同步 | 已合并 |
+| PR 35 | fix/error-messages | 错误提示细化（URL 格式 / 404 / 通用错误） | 已合并 |
 
 ## License
 
