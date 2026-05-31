@@ -2,7 +2,11 @@
 
 AI PR Review 助手：输入 GitHub PR 链接，自动生成变更总结、风险识别与 Review 建议。
 
+> **Demo 视频**：[B 站链接](https://www.bilibili.com/video/BV1QiVn6LEnh/?share_source=copy_web&vd_source=538cece1781ba5296ce8f1b88b995a62)
+
 ## Demo
+
+**视频演示：[B 站链接](https://www.bilibili.com/video/BV1QiVn6LEnh/?share_source=copy_web&vd_source=538cece1781ba5296ce8f1b88b995a62)**
 
 > 本地运行后访问 http://localhost:3000
 
